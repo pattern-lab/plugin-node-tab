@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "fs-extra": "^0.30.0"
+    "fs-extra": "^0.30.0",
+    "glob": "^7.0.0"
   },
   "repository": {
     "type": "git",
