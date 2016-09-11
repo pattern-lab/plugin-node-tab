@@ -1,10 +1,45 @@
-"use strict";
+'use strict';
+
+const pluginName = 'plugin-node-tab';
 
 var fs = require('fs-extra'),
   glob = require('glob'),
-  path = require('path');
+  path = require('path'),
+  tab_loader = require('./src/tab-loader');
 
-function plugin_init(patternlab) {
+function onPatternIterate(patternlab, pattern) {
+  tab_loader(patternlab, pattern);
+}
+
+/**
+ * Define what events you wish to listen to here
+ * @param patternlab - global data store which has the handle to the event emitter
+   */
+function registerEvents(patternlab){
+
+  //TODO: list all possible events
+  patternlab.events.on('patternlab-pattern-write-end', onPatternIterate);
+}
+
+/**
+* A single place to define the frontend configuration
+  */
+function getPluginFrontendConfig() {
+  return {
+    'name':'pattern-lab\/' + pluginName,
+    'templates':[],
+    'stylesheets':[],
+    'javascripts':['patternlab-components\/pattern-lab\/' + pluginName + '\/js\/' + pluginName + '.js'],
+    'onready':'PluginTab.init()',
+    'callback':''
+  }
+}
+
+/**
+* The entry point for the plugin. You should not have to alter this code.
+* Instead, alter getPluginFrontendConfig() and registerEvents() methods
+  */
+function pluginInit(patternlab) {
 
   if(!patternlab) {
     console.error('patternlab object not provided to plugin-init');
@@ -12,25 +47,23 @@ function plugin_init(patternlab) {
   }
 
   //write the plugin json to public/patternlab-components
-  var pluginConfig = {
-    "name":"pattern-lab\/plugin-node-tab",
-    "templates":[],
-    "stylesheets":[],
-    "javascripts":["\/js\/plugin-tab.js"],
-    "onready":"PluginTab.init()",
-    "callback":""
-  }
-
+  var pluginConfig = getPluginFrontendConfig();
   var pluginConfigPathName = path.resolve(patternlab.config.paths.public.root, 'patternlab-components', 'packages');
   try {
-    fs.outputFileSync(pluginConfigPathName + '/plugin-tab.json', JSON.stringify(pluginConfig, null, 2));
+    fs.outputFileSync(pluginConfigPathName + '/' + pluginName + '.json', JSON.stringify(pluginConfig, null, 2));
   } catch (ex) {
-    console.trace('Error occurred while writing pluginFile configuration');
+    console.trace('plugin-node-tab: Error occurred while writing pluginFile configuration');
     console.log(ex);
   }
 
+  //add the plugin config to the patternlab-object
+  if (!patternlab.plugins) {
+    patternlab.plugins = [];
+  }
+  patternlab.plugins.push(pluginConfig);
+
   //write the plugin dist folder to public/pattern-lab
-  var pluginFiles = glob.sync(__dirname +'/dist/**/*');
+  var pluginFiles = glob.sync(__dirname + '/dist/**/*');
 
   if (pluginFiles && pluginFiles.length > 0) {
     for (let i = 0; i < pluginFiles.length; i++) {
@@ -38,16 +71,26 @@ function plugin_init(patternlab) {
         var fileStat = fs.statSync(pluginFiles[i]);
         if (fileStat.isFile()) {
           var relativePath = path.relative(__dirname, pluginFiles[i]).replace('dist', ''); //dist is dropped
-          var writePath = path.join(patternlab.config.paths.public.root,'patternlab-components', 'pattern-lab', 'plugin-node-tab', relativePath);
+          var writePath = path.join(patternlab.config.paths.public.root,'patternlab-components', 'pattern-lab', pluginName, relativePath);
           fs.copySync(pluginFiles[i], writePath);
         }
       } catch (ex) {
-        console.trace('Error occurred while copying pluginFile', pluginFiles[i]);
+        console.trace('plugin-node-tab: Error occurred while copying pluginFile', pluginFiles[i]);
         console.log(ex);
       }
     }
   }
 
+  //setup listeners if not already active
+  if (patternlab.config[pluginName] !== undefined && !patternlab.config[pluginName]) {
+
+    //register events
+    registerEvents(patternlab);
+
+    //set the plugin key to true to indicate it is installed and ready
+    patternlab.config[pluginName] = true;
+  }
+
 }
 
-module.exports = plugin_init;
+module.exports = pluginInit;
