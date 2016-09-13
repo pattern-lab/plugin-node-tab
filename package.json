@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "eslint dist/** src/** index.js postinstall.js",
-    "post_install": "node ./postinstall.js"
+    "postinstall": "node ./postinstall.js"
   },
   "author": "Brian Muenzenmeyer",
   "license": "MIT",
