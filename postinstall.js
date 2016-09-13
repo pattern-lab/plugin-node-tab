@@ -27,8 +27,8 @@ inquirer
     }
 
     for (let i = 0; i < fileTypes.length; i++) {
-      if (fileTypes[i].charAt(0) !== '.') {
-        fileTypes[i] = '.' + fileTypes[i];
+      if (fileTypes[i].charAt(0) === '.') {
+        fileTypes[i] = fileTypes[i].slice(1);
       }
     }
 

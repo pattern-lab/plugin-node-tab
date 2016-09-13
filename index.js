@@ -2,9 +2,10 @@
 
 const pluginName = 'plugin-node-tab';
 
-var fs = require('fs-extra'),
+const fs = require('fs-extra'),
   glob = require('glob'),
   path = require('path'),
+  EOL = require('os').EOL,
   tab_loader = require('./src/tab-loader');
 
 function onPatternIterate(patternlab, pattern) {
@@ -46,6 +47,8 @@ function pluginInit(patternlab) {
     process.exit(1);
   }
 
+  let fileTypes = require('./package.json').fileTypes;
+
   //write the plugin json to public/patternlab-components
   var pluginConfig = getPluginFrontendConfig();
   var pluginConfigPathName = path.resolve(patternlab.config.paths.public.root, 'patternlab-components', 'packages');
@@ -66,13 +69,31 @@ function pluginInit(patternlab) {
   var pluginFiles = glob.sync(__dirname + '/dist/**/*');
 
   if (pluginFiles && pluginFiles.length > 0) {
+
+    let tab_frontend_snippet = fs.readFileSync(path.resolve(__dirname + '/src/snippet.js'), 'utf8');
+
     for (let i = 0; i < pluginFiles.length; i++) {
       try {
         var fileStat = fs.statSync(pluginFiles[i]);
         if (fileStat.isFile()) {
           var relativePath = path.relative(__dirname, pluginFiles[i]).replace('dist', ''); //dist is dropped
           var writePath = path.join(patternlab.config.paths.public.root, 'patternlab-components', 'pattern-lab', pluginName, relativePath);
-          fs.copySync(pluginFiles[i], writePath);
+
+          //a message to future plugin authors:
+          //depending on your plugin's job - you might need to alter the dist file instead of copying.
+          //if you are simply copying dist files, you can probably do the below:
+          //fs.copySync(pluginFiles[i], writePath);
+
+          //in this case, we need to alter the dist file to loop through our tabs to load as defined in the package.json
+          //we are also being a bit lazy here, since we only expect one file
+          let tabJSFileContents = fs.readFileSync(pluginFiles[i], 'utf8');
+          var snippetString = '';
+          for (let j = 0; j < fileTypes.length; j++) {
+            let tabSnippetLocal = tab_frontend_snippet.replace(/<<type>>/g, fileTypes[j]).replace(/<<typeUC>>/g, fileTypes[j].toUpperCase());
+            snippetString += tabSnippetLocal + EOL;
+          }
+          tabJSFileContents = tabJSFileContents.replace('/*SNIPPETS*/', snippetString);
+          fs.outputFileSync(writePath, tabJSFileContents);
         }
       } catch (ex) {
         console.trace('plugin-node-tab: Error occurred while copying pluginFile', pluginFiles[i]);
