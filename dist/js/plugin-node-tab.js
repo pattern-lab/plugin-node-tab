@@ -1,6 +1,8 @@
+/* global Panels */
+
 var PluginTab = {
 
-  init: function() {
+  init: function () {
 
     Panels.add({
       'id': 'sg-panel-scss',
@@ -14,6 +16,6 @@ var PluginTab = {
       'language': 'markup',
       'keyCombo': 'ctrl+shift+z'
     });
-    
+
   }
 };

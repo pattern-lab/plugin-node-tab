@@ -11,10 +11,16 @@
     "type": "git",
     "url": "git+https://github.com/pattern-lab/plugin-node-tab.git"
   },
-  "author": "",
+  "scripts": {
+    "test": "eslint dist/** src/**"
+  },
+  "author": "Brian Muenzenmeyer",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pattern-lab/plugin-node-tab/issues"
   },
-  "homepage": "https://github.com/pattern-lab/plugin-node-tab#readme"
+  "homepage": "https://github.com/pattern-lab/plugin-node-tab#readme",
+  "devDependencies": {
+    "eslint": "^3.5.0"
+  }
 }

@@ -60,7 +60,7 @@
     "no-undef": 2,
     "no-underscore-dangle": 0,
     "no-unreachable": 1,
-    "no-unused-vars": 1,
+    "no-unused-vars": 0,
     "no-use-before-define": 1,
     "no-useless-call": 2,
     "no-useless-concat": 2,
