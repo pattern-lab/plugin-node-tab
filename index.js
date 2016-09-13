@@ -15,7 +15,7 @@ function onPatternIterate(patternlab, pattern) {
  * Define what events you wish to listen to here
  * @param patternlab - global data store which has the handle to the event emitter
    */
-function registerEvents(patternlab){
+function registerEvents(patternlab) {
 
   //TODO: list all possible events
   patternlab.events.on('patternlab-pattern-write-end', onPatternIterate);
@@ -41,7 +41,7 @@ function getPluginFrontendConfig() {
   */
 function pluginInit(patternlab) {
 
-  if(!patternlab) {
+  if (!patternlab) {
     console.error('patternlab object not provided to plugin-init');
     process.exit(1);
   }
@@ -71,7 +71,7 @@ function pluginInit(patternlab) {
         var fileStat = fs.statSync(pluginFiles[i]);
         if (fileStat.isFile()) {
           var relativePath = path.relative(__dirname, pluginFiles[i]).replace('dist', ''); //dist is dropped
-          var writePath = path.join(patternlab.config.paths.public.root,'patternlab-components', 'pattern-lab', pluginName, relativePath);
+          var writePath = path.join(patternlab.config.paths.public.root, 'patternlab-components', 'pattern-lab', pluginName, relativePath);
           fs.copySync(pluginFiles[i], writePath);
         }
       } catch (ex) {

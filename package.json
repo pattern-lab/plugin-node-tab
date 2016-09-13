@@ -5,14 +5,16 @@
   "main": "index.js",
   "dependencies": {
     "fs-extra": "^0.30.0",
-    "glob": "^7.0.0"
+    "glob": "^7.0.0",
+    "inquirer": "^1.1.3"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pattern-lab/plugin-node-tab.git"
   },
   "scripts": {
-    "test": "eslint dist/** src/**"
+    "test": "eslint dist/** src/** index.js postinstall.js",
+    "post_install": "node ./postinstall.js"
   },
   "author": "Brian Muenzenmeyer",
   "license": "MIT",
