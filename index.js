@@ -14,17 +14,19 @@ function onPatternIterate(patternlab, pattern) {
 
 /**
  * Define what events you wish to listen to here
+ * For a full list of events - check out https://github.com/pattern-lab/patternlab-node/wiki/Creating-Plugins#events
  * @param patternlab - global data store which has the handle to the event emitter
    */
 function registerEvents(patternlab) {
-
-  //TODO: list all possible events
+  //register our handler at the appropriate time of execution
   patternlab.events.on('patternlab-pattern-write-end', onPatternIterate);
 }
 
 /**
 * A single place to define the frontend configuration
-  */
+* This configuration is outputted to the frontend explicitly as well as included in the plugins object.
+*
+*/
 function getPluginFrontendConfig() {
   return {
     'name':'pattern-lab\/' + pluginName,
@@ -37,7 +39,7 @@ function getPluginFrontendConfig() {
 }
 
 /**
-* The entry point for the plugin. You should not have to alter this code.
+* The entry point for the plugin. You should not have to alter this code much under many circumstances.
 * Instead, alter getPluginFrontendConfig() and registerEvents() methods
   */
 function pluginInit(patternlab) {
