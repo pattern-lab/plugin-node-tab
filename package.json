@@ -1,6 +1,6 @@
 {
   "name": "plugin-node-tab",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha",
   "description": "",
   "main": "index.js",
   "dependencies": {
