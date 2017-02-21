@@ -102,12 +102,14 @@ function pluginInit(patternlab) {
           //we are also being a bit lazy here, since we only expect one file
           let tabJSFileContents = fs.readFileSync(pluginFiles[i], 'utf8');
           var snippetString = '';
-          for (let j = 0; j < pluginConfig.tabsToAdd.length; j++) {
-            let tabSnippetLocal = tab_frontend_snippet.replace(/<<type>>/g, pluginConfig.tabsToAdd[j]).replace(/<<typeUC>>/g, pluginConfig.tabsToAdd[j].toUpperCase());
-            snippetString += tabSnippetLocal + EOL;
+          if (pluginConfig.tabsToAdd && pluginConfig.tabsToAdd.length > 0) {
+            for (let j = 0; j < pluginConfig.tabsToAdd.length; j++) {
+              let tabSnippetLocal = tab_frontend_snippet.replace(/<<type>>/g, pluginConfig.tabsToAdd[j]).replace(/<<typeUC>>/g, pluginConfig.tabsToAdd[j].toUpperCase());
+              snippetString += tabSnippetLocal + EOL;
+            }
+            tabJSFileContents = tabJSFileContents.replace('/*SNIPPETS*/', snippetString);
+            fs.outputFileSync(writePath, tabJSFileContents);
           }
-          tabJSFileContents = tabJSFileContents.replace('/*SNIPPETS*/', snippetString);
-          fs.outputFileSync(writePath, tabJSFileContents);
         }
       } catch (ex) {
         console.trace('plugin-node-tab: Error occurred while copying pluginFile', pluginFiles[i]);
