@@ -7,7 +7,6 @@ const glob = require('glob');
 const path = require('path');
 const EOL = require('os').EOL;
 const tab_loader = require('./src/tab-loader');
-const config = require('./config.json');
 
 function writeConfigToOutput(patternlab, pluginConfig) {
   var pluginConfigPathName = path.resolve(patternlab.config.paths.public.root, 'patternlab-components', 'packages');
@@ -46,7 +45,7 @@ function getPluginFrontendConfig() {
     'javascripts':['patternlab-components\/pattern-lab\/' + pluginName + '\/js\/' + pluginName + '.js'],
     'onready':'PluginTab.init()',
     'callback':''
-  }
+  };
 }
 
 /**
