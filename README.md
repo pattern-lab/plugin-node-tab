@@ -38,7 +38,7 @@ Example:
 }
 ```
 
-Add file extensions to this array as strings. Example: `"tabsToAdd": ['scss', 'js']`. You are all set now.
+Add file extensions to this array as strings. Example: `"tabsToAdd": ["scss", "js"]`. You are all set now.
 
 ## Expected Structure
 
