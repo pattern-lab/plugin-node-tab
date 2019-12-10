@@ -1,6 +1,4 @@
-![license](https://img.shields.io/github/license/pattern-lab/plugin-node-tab.svg)
-[![npm](https://img.shields.io/npm/v/plugin-node-tab.svg)](https://www.npmjs.com/package/plugin-node-tab)
-[![Gitter](https://img.shields.io/gitter/room/pattern-lab/php.svg)](https://gitter.im/pattern-lab/php)
+[📢 Archived in favor of https://github.com/pattern-lab/patternlab-node](https://github.com/pattern-lab/patternlab-node)
 
 # Tab Plugin for Pattern Lab Node
 
