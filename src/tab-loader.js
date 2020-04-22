@@ -38,8 +38,10 @@ function findTab(patternlab, pattern) {
     //look for a custom filetype for this template
     try {
       var tabFileName = path.resolve(customFileTypePath);
+      var tabFileNameStats = null;
       try {
-        var tabFileNameStats = fs.statSync(tabFileName);
+        var _stats = fs.statSync(tabFileName);
+        _stats && (tabFileNameStats = _stats);
       } catch (err) {
         //not a file - move on quietly
       }
